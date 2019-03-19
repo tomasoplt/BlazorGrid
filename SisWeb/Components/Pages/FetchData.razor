@@ -1,0 +1,35 @@
+@page "/fetchdata"
+@using SisWeb.Services
+@inject WeatherForecastService ForecastService
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+@if (forecasts == null)
+{
+    <p><em>Loading data...</em></p>
+}
+else
+{
+    <BlazorGrid Items="@forecasts" PageSize="10">
+        <GridHeader>
+            <th>Date</th>
+            <th>Temperature C</th>
+        </GridHeader>
+        <GridRow Context="obj">
+            <td>@obj.Date</td>
+            <td>@obj.TemperatureC</td>
+        </GridRow>
+    </BlazorGrid>
+}
+
+
+@functions {
+    WeatherForecast[] forecasts;
+
+    protected override async Task OnInitAsync()
+    {
+        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+    }
+}
